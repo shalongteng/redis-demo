@@ -27,8 +27,8 @@ public class RedisController {
 
     @RequestMapping("/redis/setAndGet1")
     @ResponseBody
-    public String setAndGetValueV2(String name,String value){
-        redisService.set(name,value);
-        return redisService.get(name).toString();
+    public String setAndGetValueV2(String key,String value){
+        redisService.set(key,value);
+        return redisService.get(key).toString();
     }
 }

@@ -24,7 +24,11 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 public class RedisConfig {
-
+    /**
+     * RedisAutoConfiguration 中有默认配置，所有可以不写，就可以直接注入使用
+     * @param factory
+     * @return
+     */
     @Bean
     public RedisTemplate<String,String> redisTemplate(RedisConnectionFactory factory){
         RedisTemplate<String,String> redisTemplate = new RedisTemplate<>();
