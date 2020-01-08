@@ -1,4 +1,5 @@
 #   @EventListener
+#   jdesi 和redisTemplate区别
 
 
 #1、redis 简介

@@ -1,4 +1,4 @@
-#  Redis Centos7搭建以及Redis三种启动方式
+# Redis Centos7搭建以及Redis三种启动方式
 
 1、 手把手mac环境下centos7安装过程（windows同理）
         安装vmware虚拟机
