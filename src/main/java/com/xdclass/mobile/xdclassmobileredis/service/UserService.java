@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 @Service
+//@CacheConfig的作用：抽取@Cacheable、@CachePut、@CacheEvict的公共属性值
 @CacheConfig(cacheNames="userInfoCache") // 本类内方法指定使用缓存时，默认的名称就是userInfoCache
 @Transactional(propagation=Propagation.REQUIRED,readOnly=false,rollbackFor=Exception.class)
 public class UserService {
@@ -21,6 +22,12 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    /**
+     * @CachePut的作用：即调用方法，又更新缓存数据 ，修改了数据库中的数据，同时又更新了缓存！
+     * @Caching是@Cacheable、@CachePut、@CacheEvict注解的组合
+     * @param u
+     * @return
+     */
     // 因为必须要有返回值，才能保存到数据库中，如果保存的对象的某些字段是需要数据库生成的，
     //那保存对象进数据库的时候，就没必要放到缓存了
     @CachePut(key="#p0.id")  //#p0表示第一个参数
@@ -39,8 +46,33 @@ public class UserService {
         return this.userMapper.find(u.getId());
     }
 
+    /**
+     *1、 @Cacheable 会先查询缓存，
+     *    如果缓存中存在，则不执行service方法
+     *    如果缓存不存在，将会查询出来放到缓存中去。
+     /2、 spel：表达式
+     *    方法参数的名字，可以直接#参数名，也可以使用#p0或#a0的形式，0代表参数的索引	#name、#a0、#p0
+     *    方法执行后的返回值	#result
+     *    当前被调用的方法名	#root.methodName
+     *    当前被调用的方法	#root.method.name
+     *    当前被调用的目标对象类	#root.targetClass
+     *    当前被调用的方法的参数列表	#root.args[0]
+     *    当前方法调用使用的缓存列表	#root.caches[0].name
+     *3、@Cacheable的几个属性详解：
+     *       cacheNames/value：指定缓存组件的名字
+     *       key：缓存数据使用的key,可以用它来指定。默认使用方法参数的值，一般不需要指定
+     *       keyGenerator：作用和key一样，二选一
+     *
+     *       cacheManager和cacheResolver作用相同：指定缓存管理器，二选一
+     *       condition：指定符合条件才缓存，比如：condition="#id>3"
+     *       也就是说传入的参数id>3才缓存数据
+     *       unless：否定缓存，当unless为true时不缓存，可以获取方法结果进行判断
+     *       sync：是否使用异步模式
+     * @param id
+     * @return
+     */
     @Nullable
-    @Cacheable(key="#p0") // @Cacheable 会先查询缓存，如果缓存中存在，则不执行方法
+    @Cacheable(key="#p0")
     public User findById(String id){
         System.err.println("根据id=" + id +"获取用户对象，从数据库中获取");
         Assert.notNull(id,"id不用为空");

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@EnableCaching
+@EnableCaching // 开启缓存注解
 public class RedisConfig {
     /**
      * RedisAutoConfiguration 中有默认配置，所有可以不写，就可以直接注入使用

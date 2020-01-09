@@ -32,6 +32,10 @@ public class RedisService {
         boolean result = false;
         try {
             ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+            /**
+             *  设置或者清空key的value(字符串)在offset处的bit值。
+             *  那个位置的bit要么被设置，要么被清空，这个由value（只能是0或者1）来决定。
+             */
             operations.setBit(key, offset, isShow);
             result = true;
         } catch (Exception e) {
@@ -79,7 +83,7 @@ public class RedisService {
     }
 
     /**
-     * 写入缓存设置时效时间
+     * 写入缓存设置失效时间
      *
      * @param key
      * @param value
@@ -90,6 +94,7 @@ public class RedisService {
         try {
             ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
             operations.set(key, value);
+            //不属于五种基本类型  的共有方法放在redisTemplate中
             redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
             result = true;
         } catch (Exception e) {
@@ -176,7 +181,8 @@ public class RedisService {
      */
     public void lPush(String k, Object v) {
         ListOperations<String, Object> list = redisTemplate.opsForList();
-        list.rightPush(k, v);
+//        list.rightPush(k, v);
+        list.leftPush(k,v);
     }
 
     /**
@@ -230,18 +236,20 @@ public class RedisService {
      * 有序集合获取
      *
      * @param key
-     * @param scoure
-     * @param scoure1
+     * @param score
+     * @param score1
      * @return
      */
-    public Set<Object> rangeByScore(String key, double scoure, double scoure1) {
+    public Set<Object> rangeByScore(String key, double score, double score1) {
         ZSetOperations<String, Object> zset = redisTemplate.opsForZSet();
         redisTemplate.opsForValue();
-        return zset.rangeByScore(key, scoure, scoure1);
+        return zset.rangeByScore(key, score, score1);
     }
 
-
-    //第一次加载的时候将数据加载到redis中
+    /**
+     * 第一次加载的时候将数据加载到redis中
+     * @param name
+     */
     public void saveDataToRedis(String name) {
         double index = Math.abs(name.hashCode() % size);
         long indexLong = new Double(index).longValue();

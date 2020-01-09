@@ -73,33 +73,82 @@
      所以，一个多线程的应用可以使用同一个连接实例，而不用担心并发线程的数量。
      当然这个也是可伸缩的设计，一个连接实例不够的情况也可以按需增加连接实例。
  
-  #4、redis作为mybatis二级缓存整合讲解（中）
+  #4、mybatis缓存讲解
+     MyBatis 默认是开启一级缓存的，即同一个 sqlSession 每次查询都会先去缓存中查询，没有数据的话，再去数据库获取数据。
+     整合到 Spring 中后，一级缓存就会被关闭。
+     
+     二级缓存，它的范围是整个 mapper 的，以命名空间进行区分。默认配置就是启用二级缓存的。在mapper.xml文件里添加二级缓存的属性配置： 
+      
+     <cache />   加上这个标签，二级缓存就会启用，它的默认属性如下
+            映射语句文件中的所有 select 语句将会被缓存。
+            映射语句文件中的所有 insert,update 和 delete 语句会刷新缓存。
+            缓存会使用 Least Recently Used(LRU,最近最少使用的)算法来收回。
+            根据时间表(比如 no Flush Interval,没有刷新间隔), 缓存不会以任何时间顺序来刷新。
+            缓存会存储列表集合或对象(无论查询方法返回什么)的 1024 个引用。
+            缓存会被视为是 read/write(可读/可写)的缓存,意味着对象检索不是共享的,而且可以安全地被调用者修改,而不干扰其他调用者或线程所做的潜在修改。
             
-    1、springboot cache的使用：可以结合redis、ehcache等缓存
-    
-           一级缓存是：sqlSession，sql建立连接到关闭连接的数据缓存
-           二级缓存是：全局
-      
-      @CacheConfig(cacheNames="userInfoCache")  在同个redis里面必须唯一
+     也可以自定义二级缓存的属性，例如：
+        <cache
+          eviction="FIFO"
+          flushInterval="60000"
+          size="512"
+          readOnly="true"/>
+          
+          
+#5、springboot cache的使用：可以结合redis、ehcache等缓存
+         1、springboot cache的整合步骤：
+           
+         1）引入pom.xml依赖： 
+            <dependency>
+                 <groupId>org.springframework.boot</groupId>
+                 <artifactId>spring-boot-starter-cache</artifactId>
+            </dependency>
 
-      @Cacheable(查) ： 
-                  来划分可缓存的方法 - 即，结果存储在缓存中的方法，以便在后续调用（具有相同的参数）时，返回缓存中的值而不必实际执行该方法
-     
-      @CachePut（修改、增加） ：
-                  当需要更新缓存而不干扰方法执行时，可以使用@CachePut注释。也就是说，始终执行该方法并将其结果放入缓存中（根据@CachePut选项）
-     
-      @CacheEvict（删除） ：
-                  对于从缓存中删除陈旧或未使用的数据非常有用，指示缓存范围内的驱逐是否需要执行而不仅仅是一个条目驱逐
-
-    2、springboot cache的整合步骤：
-
-          1）引入pom.xml依赖： <dependency>
-                          <groupId>org.springframework.boot</groupId>
-                          <artifactId>spring-boot-starter-cache</artifactId>
-                         </dependency>
-      
-      2）开启缓存注解： @EnableCaching
-
-      3）在方法上面加入SpEL                  
+         2）开启缓存注解： @EnableCaching
    
+         3）在方法上面加入SpEL，使用注解                  
+      
+      2、springboot cache的使用：
+       
+         @CacheConfig(cacheNames="userInfoCache")  在同个redis里面必须唯一
+   
+         @Cacheable(查) ： 
+                     来划分可缓存的方法 - 即，结果存储在缓存中的方法，以便在后续调用（具有相同的参数）时，返回缓存中的值而不必实际执行该方法
+        
+         @CachePut（修改、增加） ：
+                     当需要更新缓存而不干扰方法执行时，可以使用@CachePut注释。也就是说，始终执行该方法并将其结果放入缓存中（根据@CachePut选项）
+        
+         @CacheEvict（删除） ：
+                     对于从缓存中删除陈旧或未使用的数据非常有用，指示缓存范围内的驱逐是否需要执行而不仅仅是一个条目驱逐
+                     
+      3、springboot cache 存在什么问题，
+            第一，生成key过于简单，容易冲突userCache::3
+            第二，无法设置过期时间，默认过期时间为永久不过期
+            第三，配置序列化方式，默认的是序列化JDKSerialazable
+   
+          1、springboot cache自定义项
+   
+                1)自定义KeyGenerator            
+                
+                2)自定义cacheManager，设置缓存过期时间
+   
+                3）自定义序列化方式，Jackson    
+   
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+            
 

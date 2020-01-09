@@ -36,6 +36,7 @@ public class UserController {
     }
 
     /**
+     * 测试redis 常用方法
      * set值和get值的时候序列化方式必须保持一致
      * @param id
      * @return
@@ -43,7 +44,6 @@ public class UserController {
     @RequestMapping("/getUserCache")
     @ResponseBody
     public User getUseCache(String id) {
-
         //step1 先从redis里面取值
         User user =  (User)redisService.get(key + id);
 
@@ -62,7 +62,11 @@ public class UserController {
         return user;
     }
 
-
+    /**
+     * 通过springboot cache方法获取
+     * @param id
+     * @return
+     */
     @RequestMapping("/getByCache")
     @ResponseBody
     public User getByCache(String id) {
