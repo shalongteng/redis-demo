@@ -24,7 +24,7 @@
 
 
         3)maxInactiveIntervalInSeconds指定缓存的时间
-         spring:session:sessions:expires:+‘sessionId’的过期时间  
+         key---> spring:session:sessions:expires:+‘sessionId’的过期时间  
 
      3、验证过程
         打开隐身模式清空cookie来验证缓存的时间    

@@ -15,6 +15,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import javax.annotation.Resource;
 import java.time.Duration;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 @Configuration
 @EnableCaching // 开启缓存注解
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds= 150)
 public class RedisConfig {
     /**
      * RedisAutoConfiguration 中有默认配置，所有可以不写，就可以直接注入使用
