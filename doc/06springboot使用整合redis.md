@@ -124,7 +124,7 @@
       3、springboot cache 存在什么问题，
             第一，生成key过于简单，容易冲突userCache::3
             第二，无法设置过期时间，默认过期时间为永久不过期
-            第三，配置序列化方式，默认的是序列化JDKSerialazable
+            第三，配置序列化方式，默认的是序列化JDK Serialazable
    
           1、springboot cache自定义项
    

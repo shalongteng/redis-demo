@@ -93,9 +93,13 @@ public class UserService {
         this.userMapper.deleteAll();
     }
 
-
+    /**
+     * 如果可以传入NULL值，则标记为@Nullable，如果不可以，则标注为@Nonnull。
+     * @param id
+     * @return
+     */
     @Nullable
-    @Cacheable(value = "UserInfoList", keyGenerator = "simpleKeyGenerator") // @Cacheable 会先查询缓存，如果缓存中存在，则不执行方法
+    @Cacheable(value = "UserInfoList", keyGenerator = "simpleKeyGenerator")
     public User findByIdTtl(String id){
         System.err.println("根据id=" + id +"获取用户对象，从数据库中获取");
         Assert.notNull(id,"id不用为空");

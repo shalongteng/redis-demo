@@ -1,6 +1,6 @@
 #   @EventListener
 #   jdesi 和redisTemplate区别
-
+#   redis客户端乱码问题  配置redis序列化以后，就不会乱码了
 
 #1、redis 简介
     REmote DIctionary Server(Redis) 是一个key-value存储系统。

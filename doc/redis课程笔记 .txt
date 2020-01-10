@@ -693,7 +693,7 @@
 ==================================================================================================
 第六章    springboot与Redis深度整合与应用
    
-     7、redis作为mybatis二级缓存整合讲解（中）续
+     7、redis作为mybatis缓存整合讲解（中）续
          
        简介：springboot cache 存在什么问题，
             第一，生成key过于简单，容易冲突userCache::3
@@ -719,10 +719,9 @@
          1、apache abtest
                    ab是Apache HTTP server benchmarking tool，可以用以测试HTTP请求的服务器性能
 
-         
          2、abtest的安装
                    1）yum install -y httpd-tools
-                   2）ab -V检验是否安装成功
+                   2）ab -V检验是否安装成功(V大写）
 
 
          3、ab -n1000 -c10 http://localhost:8080/getByCache?id=2
@@ -731,6 +730,7 @@
                   1）-n:进行http请求的总个数
                   2）-c:请求的client个数，也就是请求并发数
                   3)统计qps：qps即每秒并发数，request per second
+
              统计：10个并发的情况下
                  redis qps：963.85[#/sec] (mean)
                  DB qps： 766.75 [#/sec] (mean)

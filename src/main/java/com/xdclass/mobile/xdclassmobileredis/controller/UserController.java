@@ -74,6 +74,11 @@ public class UserController {
         return user;
     }
 
+    /**
+     * 测试 有过期时间的 springboot cache
+     * @param id
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/getexpire", method = RequestMethod.GET)
     public User findByIdTtl(String id) {
