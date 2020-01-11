@@ -1,5 +1,6 @@
 package com.xdclass.mobile.xdclassmobileredis.controller;
 
+import com.xdclass.mobile.xdclassmobileredis.RedisService;
 import com.xdclass.mobile.xdclassmobileredis.autowired.Test1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
@@ -8,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class TestController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private RedisService redisService;
 //    @Resource
 //    private ScoreFlowMapper scoreFlowMapper;
 
@@ -75,7 +76,36 @@ public class TestController {
 //        return scoreFlowMapper.selectByExample(example).get(0);
 //    }
 
+    /**
+     * 测试存取大对象 所需要时间
+     * @return
+     */
+    @RequestMapping("/testBigValue")
+    @ResponseBody
+    public String testBigValue() {
+        List list  = new ArrayList<String>();
+
+        for (int i = 0; i <2000000 ; i++) {
+            list.add(i+"");
+        }
+        System.out.println((list.toString().getBytes().length)/(1024*1024) + "Mb");
 
 
+
+        long startTime = System.currentTimeMillis();
+//        redisService.set("testBigValue",list.toString());
+        redisTemplate.boundValueOps("testBigValue").set(list.toString());
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("存入所需时间：" + (endTime - startTime) + " ms");
+
+
+        startTime = System.currentTimeMillis();
+//        redisService.get("testBigValue");
+        redisTemplate.boundValueOps("testBigValue").get();
+        endTime = System.currentTimeMillis();
+        System.out.println("获取所需时间：" + (endTime - startTime) + " ms");
+        return "hello world";
+    }
 
 }

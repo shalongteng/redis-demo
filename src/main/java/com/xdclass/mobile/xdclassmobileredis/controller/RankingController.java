@@ -20,7 +20,7 @@ public class RankingController {
     private RangingService rankingService;
 
     /**
-     * 初始化去 添加分数
+     * 初始化时候 添加分数
      * @param uid
      * @param score
      * @return
@@ -83,9 +83,12 @@ public class RankingController {
     }
 
 
-
-
-
+    /**
+     * 增加 用户积分
+     * @param uid
+     * @param score
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/sale/increScore")
     public String increSaleScore(String uid, Integer score) {
@@ -93,7 +96,12 @@ public class RankingController {
         return "success";
     }
 
-
+    /**
+     *
+     * @param uid
+     * @param name
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/sale/userScore")
     public Map<String,Object> userScore(String uid,String name) {

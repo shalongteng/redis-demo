@@ -91,13 +91,19 @@ public class RangingService implements InitializingBean {
         String key = uid + ":" + name;
         scoreFlowMapper.insertSelective(new ScoreFlow(socreLong, uidInt, name));
         userScoreMapper.insertSelective(new UserScore(uidInt, socreLong, name));
+        //SALESCORE==sale_score_rank
         redisService.incrementScore(SALESCORE, key, score);
     }
 
-
+    /**
+     *
+     * @param uid
+     * @param name
+     * @return
+     */
     public Map<String, Object> userRank(String uid, String name) {
         Map<String, Object> retMap = new LinkedHashMap<>();
-        String key = uid + ":" + name;
+        String key = uid + ":" + name;//SALESCORE==sale_score_rank
         Integer rank = redisService.zRank(SALESCORE, key).intValue();
         Long score = redisService.zSetScore(SALESCORE, key).longValue();
         retMap.put("userId", uid);
