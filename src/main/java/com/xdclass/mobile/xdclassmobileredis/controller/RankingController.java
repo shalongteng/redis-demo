@@ -84,7 +84,7 @@ public class RankingController {
 
 
     /**
-     * 增加 用户积分
+     * 添加/增加 用户积分
      * @param uid
      * @param score
      * @return
@@ -97,7 +97,7 @@ public class RankingController {
     }
 
     /**
-     *
+     * 获取用户 分数 和排名
      * @param uid
      * @param name
      * @return
@@ -108,13 +108,24 @@ public class RankingController {
         return rankingService.userRank(uid,name);
     }
 
+    /**
+     * 倒叙 获取前 多少名
+     * @param start
+     * @param end
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/sale/top")
     public List<Map<String,Object>> reverseZRankWithRank(long start,long end) {
         return rankingService.reverseZRankWithRank(start,end);
     }
 
-
+    /**
+     * 根据分数获取 排名
+     * @param start
+     * @param end
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/sale/scoreByRange")
     public List<Map<String,Object>> saleScoreByRange(Integer start, Integer end) {
