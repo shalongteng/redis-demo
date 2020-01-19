@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -161,6 +162,11 @@ public class RedisService {
         hash.put(key, hashKey, value);
     }
 
+    public void putAll(String key, Map map) {
+        HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
+        hash.putAll(key,map);
+    }
+
     /**
      * 哈希获取数据
      *
@@ -172,6 +178,8 @@ public class RedisService {
         HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
         return hash.get(key, hashKey);
     }
+
+
 
     /**
      * 列表添加

@@ -10,7 +10,11 @@
              InitializingBean接口为bean提供了初始化方法的方式，它只包括afterPropertiesSet()方法。
              在spring初始化bean的时候，如果bean实现了InitializingBean接口，
              在对象的所有属性被初始化后之后才会调用afterPropertiesSet()方法
-    
-      2、初始化同步redis数据
+             
+          3、采用实现CommandLineRunner接口
+             实现run()方法，
+             如果存在多个加载的数据，我们也可以使用@Order注解来排序。 
+               
+      2、初始化同步redis数据    
     
       3、初始化完成再放入请求
